@@ -1,0 +1,67 @@
+// {
+//   parserOptions: {
+//     tsconfigRootDir: __dirname,
+//   },
+//   rules: {
+//     '@typescript-eslint/interface-name-prefix': 'off',
+//     '@typescript-eslint/explicit-function-return-type': 'off',
+//     '@typescript-eslint/explicit-module-boundary-types': 'off',
+//     '@typescript-eslint/no-explicit-any': 'off',
+//   },
+// };
+
+{
+  "env": {
+    "es2021": true,
+    "node": true,
+    "jest": true
+  },
+  "root": true,
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:import/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "overrides": [],
+  "parserOptions": {
+    "project": "tsconfig.json",
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+  },
+  "plugins": ["@typescript-eslint", "import", "prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        "prefer": "type-imports"
+      }
+    ],
+    "@typescript-eslint/explicit-function-return-type": [
+      "error",
+      {
+        "allowTypedFunctionExpressions": true
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "groups": [["builtin", "external"], "internal", "parent", "sibling"],
+        "newlines-between": "always"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [["~", "./src"]],
+        "extensions": [".ts", ".js", ".json"]
+      }
+    }
+  }
+}
