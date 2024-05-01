@@ -1,15 +1,3 @@
-// {
-//   parserOptions: {
-//     tsconfigRootDir: __dirname,
-//   },
-//   rules: {
-//     '@typescript-eslint/interface-name-prefix': 'off',
-//     '@typescript-eslint/explicit-function-return-type': 'off',
-//     '@typescript-eslint/explicit-module-boundary-types': 'off',
-//     '@typescript-eslint/no-explicit-any': 'off',
-//   },
-// };
-
 {
   "env": {
     "es2021": true,
@@ -27,7 +15,7 @@
   "parserOptions": {
     "project": "tsconfig.json",
     "ecmaVersion": "latest",
-    "sourceType": "module",
+    "sourceType": "module"
   },
   "plugins": ["@typescript-eslint", "import", "prettier"],
   "rules": {
@@ -59,7 +47,7 @@
   "settings": {
     "import/resolver": {
       "alias": {
-        "map": [["~", "./src"]],
+        "map": [["@", "./src"]],
         "extensions": [".ts", ".js", ".json"]
       }
     }

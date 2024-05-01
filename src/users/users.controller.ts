@@ -1,34 +1,60 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UsersService } from './users.service';
+import {
+	BadRequestException,
+	Body,
+	Controller,
+	Delete,
+	Get,
+	NotFoundException,
+	Param,
+	ParseIntPipe,
+	Patch,
+	Post,
+} from '@nestjs/common';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import type { User } from './entities/user.entity';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+	constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
+	@Post()
+	async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+		const user = await this.usersService.findBy({
+			email: createUserDto.email,
+		});
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
+		if (user) throw new BadRequestException('User already exists');
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
-  }
+		return this.usersService.create(createUserDto);
+	}
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
+	@Get()
+	findAll(): Promise<User[]> {
+		return this.usersService.findAll();
+	}
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
-  }
+	@Get(':id')
+	async findOne(@Param('id', ParseIntPipe) id: number): Promise<User> {
+		const user = await this.usersService.findBy({ id });
+
+		if (!user) throw new NotFoundException('User not found');
+
+		return user;
+	}
+
+	@Patch(':id')
+	update(
+		@Param('id', ParseIntPipe) id: number,
+		@Body() updateUserDto: UpdateUserDto,
+	): Promise<User> {
+		return this.usersService.update({ id, ...updateUserDto });
+	}
+
+	@Delete(':id')
+	remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+		return this.usersService.remove(id);
+	}
 }
